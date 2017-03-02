@@ -37,7 +37,7 @@ $GWIPName = "hub-gw-pip"
 $GWIPconfName = "hub-gw-conf"
 $VPNClientAddressPool = "10.3.1.0/28"
 
-#Get the gateway subnet details.  First need to get the recently set vnet aghain
+#Get the gateway subnet details.  First need to get the recently set vnet again
 $vnet = Get-AzureRmVirtualNetwork -ResourceGroupName $RGName -Name hub-vnet
 $GWsubnet = Get-AzureRmVirtualNetworkSubnetConfig -Name "GatewaySubnet" -VirtualNetwork $vnet
 
@@ -109,7 +109,7 @@ Set-AzureRmNetworkInterface -NetworkInterface $NIC1
 #Define the Management VM config
 $VirtualMachine = New-AzureRmVMConfig -VMName $VMName -VMSize $VMSize
 $VirtualMachine = Set-AzureRmVMOperatingSystem -VM $VirtualMachine -ComputerName $VMName -Windows -Credential $Credential
-$VirtualMachine = Set-AzureRmVMSourceImage -VM $VirtualMachine -PublisherName "MicrosoftWindowsServer" -Offer "WindowsServer" -Skus "Windows-Server-Technical-Preview" -Version "latest"
+$VirtualMachine = Set-AzureRmVMSourceImage -VM $VirtualMachine -PublisherName "MicrosoftWindowsServer" -Offer "WindowsServer" -Skus "2016-Datacenter" -Version "latest"
 $VirtualMachine = Add-AzureRmVMNetworkInterface -VM $VirtualMachine -Id $NIC1.Id
 $OSDiskUri = $StorageAccount.PrimaryEndpoints.Blob.ToString() + "vhds/" + $OSDiskName + ".vhd"
 $VirtualMachine = Set-AzureRmVMOSDisk -VM $VirtualMachine -Name $OSDiskName -VhdUri $OSDiskUri -CreateOption FromImage
