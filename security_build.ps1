@@ -96,24 +96,17 @@ $NIC2 = New-AzureRmNetworkInterface -Name "firewall-vm-eth1" -ResourceGroupName 
 $NIC2.EnableIPForwarding = 1
 Set-AzureRmNetworkInterface -NetworkInterface $NIC2
 
-
 #Setup the VM object
 $VirtualMachine = New-AzureRmVMConfig -VMName $VMName -VMSize $VMSize
 $VirtualMachine = Set-AzureRmVMOperatingSystem -VM $VirtualMachine -ComputerName $VMName -Linux -Credential $Credential
-$VirtualMachine = Set-AzureRmVMSourceImage -VM $VirtualMachine -PublisherName "Canonical" -Offer "UbuntuServer" -Skus "16.04-LTS" -Version "latest"
+$VirtualMachine = Set-AzureRmVMSourceImage -VM $VirtualMachine -PublisherName "Canonical" -Offer "UbuntuServer" -Skus "14.04.4-LTS" -Version "latest"
 $VirtualMachine = Add-AzureRmVMNetworkInterface -VM $VirtualMachine -Id $NIC1.Id -Primary
 $VirtualMachine = Add-AzureRmVMNetworkInterface -VM $VirtualMachine -Id $NIC2.Id
 $OSDiskUri = $StorageAccount.PrimaryEndpoints.Blob.ToString() + "vhds/" + $OSDiskName + ".vhd"
 $VirtualMachine = Set-AzureRmVMOSDisk -VM $VirtualMachine -Name $OSDiskName -VhdUri $OSDiskUri -CreateOption FromImage
 
+# If I could afford ClearOS then I'd need to set a plan as this is a Market Place VM
+# Set-AzureRmVMPlan -VM $VirtualMachine -Publisher "clear-linux-project" -Product "clear-linux-os" -Name "basic"
+
 #Create the Firewall VM
-New-AzureRmVM -ResourceGroupName $RGName -Location $Location -VM $VirtualMachine
-
-
-
-# echo "deb http://archive.zentyal.org/zentyal 5.0 main" | sudo tee -a /etc/apt/sources.list
-# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 10E239FF
-# wget -q http://keys.zentyal.org/zentyal-5.0-archive.asc -O- | sudo apt-key add -
-# sudo apt-get update
-# sudo apt-get install zentyal
-# 
+New-AzureRmVM -ResourceGroupName $RGName -Location $Location -VM $VirtualMachine 
