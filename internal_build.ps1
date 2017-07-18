@@ -33,7 +33,7 @@ New-AzureRmStorageAccount -ResourceGroupName $RGName -AccountName "internalvmstr
 $VMName = "ad-vm"
 $VMSize = "Standard_A1"
 $OSDiskName = $VMName + "OSDisk"
-$StorageAccount = Get-AzureRmStorageAccount -ResourceGroupName  $RGName -Name internalvmstr
+$StorageAccount = Get-AzureRmStorageAccount -ResourceGroupName $RGName -Name internalvmstr
 $vnet = Get-AzureRmVirtualNetwork -ResourceGroupName $RGName -Name internal-vnet
 
 #AD VM Network Config
